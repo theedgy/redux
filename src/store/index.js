@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 
 import { createStore, combineReducers } from 'redux';
@@ -7,15 +7,15 @@ import { teams } from './teams/reducres';
 
 export const initialState = {
     teams: [],
-    current: null
+    current: null,
 };
 
-export const AppStore = ({children}) => {
+export const AppStore = ({ children }) => {
     const store = createStore(
         combineReducers({
             teams,
-            current
-        })
+            current,
+        }),
     );
 
     return (

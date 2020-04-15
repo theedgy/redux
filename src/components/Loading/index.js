@@ -2,7 +2,7 @@ import React from 'react';
 
 import './style.scss';
 
-export const Loading= ({
+export const Loading = ({
     message = 'Loading...',
 }) => {
     return (

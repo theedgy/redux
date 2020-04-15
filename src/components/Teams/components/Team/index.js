@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { setCurrentTeam } from '../../../../store/current/actions';
 
 import './index.scss';
-const Team = ({team, current, onTeamSelect}) => {
+
+const Team = ({ team, current, onTeamSelect }) => {
     return (
         <p className="Team">
             <img src={team.crestUrl}
@@ -19,7 +20,7 @@ const Team = ({team, current, onTeamSelect}) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    onTeamSelect: teamId => dispatch(setCurrentTeam(teamId))
+    onTeamSelect: teamId => dispatch(setCurrentTeam(teamId)),
 });
 
 export default connect(null, mapDispatchToProps)(Team);

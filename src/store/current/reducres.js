@@ -1,4 +1,4 @@
-import {  SET_CURRENT_TEAM } from './actions';
+import { SET_CURRENT_TEAM } from './actions';
 
 export const current = (state = null, action) => {
     switch (action.type) {

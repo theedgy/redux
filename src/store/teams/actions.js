@@ -4,7 +4,7 @@ export const ADD_TEAMS = 'ADD_TEAMS';
 export const addTeamStats = (stats, id) => ({
     type: ADD_TEAM_STATS,
     stats,
-    id
+    id,
 });
 
 export const addTeams = teams => ({
