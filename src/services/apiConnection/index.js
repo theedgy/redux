@@ -6,10 +6,10 @@ export const apiConnection = async (endpoint = '', data = null) => {
         : `/${endpoint}`;
 
     return await fetch(url, {
-            method: 'GET',
-            headers: {
-                'X-Auth-Token': '78989ff855294ecc83d070f5d9590eb0',
-            },
-        });
+        method: 'GET',
+        headers: {
+            'X-Auth-Token': '78989ff855294ecc83d070f5d9590eb0',
+        },
+    });
 };
 
