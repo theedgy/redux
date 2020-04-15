@@ -12,7 +12,6 @@ const Statistics = ({ state: { teams, current }, onAddTeamStats }) => {
         teams.find(team => team.id === current);
 
     useEffect(() => {
-        console.log(current, teams.length, currentFound);
         if (!current) {
             return;
         }
@@ -25,8 +24,6 @@ const Statistics = ({ state: { teams, current }, onAddTeamStats }) => {
         if (!!teams.length && 'stats' in currentFound) {
             return;
         }
-
-        console.log('poszlo');
 
         setStatus('loading');
 
@@ -47,7 +44,8 @@ const Statistics = ({ state: { teams, current }, onAddTeamStats }) => {
 
     return (
         <div className="Statistics app-panel">
-            <h2>Statistics {!!teams.length && currentFound && 'stats' in currentFound && `for ${currentFound.name}`}</h2>
+            <h2>Statistics {!!teams.length && currentFound && 'stats' in
+            currentFound && `for ${currentFound.name}`}</h2>
 
             {teams.length === 0 &&
             <Loading message={'Waiting for teams load'} />}
@@ -56,9 +54,9 @@ const Statistics = ({ state: { teams, current }, onAddTeamStats }) => {
             <Loading message={`Downloading ${currentFound.name} data`} />}
 
             {
-                !current && teams.length &&
-                <p><i>Please select team to display information</i></p>
-            }
+                !current && !!teams.length && (
+                    <p><i>Please select team to display information</i></p>
+                )}
 
             {
                 !!teams.length && currentFound && 'stats' in currentFound && (
@@ -78,7 +76,6 @@ const Statistics = ({ state: { teams, current }, onAddTeamStats }) => {
                     </table>
                 )
             }
-
         </div>
     );
 };
