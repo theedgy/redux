@@ -1,0 +1,23 @@
+.Team {
+    display: flex;
+    margin-bottom: 10px;
+
+    img {
+        width: 20px;
+        max-height: 20px;
+        margin-right: 20px;
+    }
+
+    a {
+        text-decoration: none;
+        font-weight: bold;
+        letter-spacing: .5px;
+        color: #000;
+
+        &.active,
+        &:hover {
+            text-decoration: underline;
+            color: darken(#62D9FB, 35);
+        }
+    }
+}

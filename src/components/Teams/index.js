@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { apiConnection } from '../../services/apiConnection';
-import { setCurrentTeam } from '../../store/current/actions';
 import { addTeams } from '../../store/teams/actions';
 import { Error } from '../Error';
 import { Loading } from '../Loading';
 import './index.scss';
+import Team from './components/Team';
 
 const defaultStatus = 'idle';
 
-const Teams = ({ state:{teams, current}, onTeamSelect, onAddTeams }) => {
+const Teams = ({ state: { teams, current }, onAddTeams }) => {
     const [status, setStatus] = useState(defaultStatus);
 
     useEffect(() => {
@@ -46,28 +46,20 @@ const Teams = ({ state:{teams, current}, onTeamSelect, onAddTeams }) => {
                 <Error message={status} />
             )}
 
-            <ul>
+            <div className="Team__list">
                 {!!teams.length && teams.map(team => (
-                    <li key={team.id}>
-                        <img src={team.crestUrl}
-                             alt={`#${team.shortName}`} />
-
-                        <a className={current === team.id ? 'active' : 'app-link'}
-                            href={`#${team.shortName}`}
-                           onClick={() => onTeamSelect(team.id)}>
-                            {`${team.name}`}
-                        </a>
-                    </li>
+                    <Team key={team.id}
+                          team={team}
+                          current={current === team.id} />
                 ))}
-            </ul>
+            </div>
         </section>
     );
 };
 
-const mapStateToProps = state => ({state});
+const mapStateToProps = state => ({ state });
 
 const mapDispatchToProps = dispatch => ({
-    onTeamSelect: teamId => dispatch(setCurrentTeam(teamId)),
     onAddTeams: teams => dispatch(addTeams(teams)),
 });
 
