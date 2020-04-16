@@ -8,9 +8,7 @@ export const teams = (state = [], action) => {
 
     case ADD_TEAM_STATS:
         const newState = [...state];
-        console.log('ADD_TEAM_STATS', newState);
         const found = newState.find(team => team.id === action.id);
-        console.log('ADD_TEAM_STATS', found);
         found['stats'] = action.stats;
         return newState;
 
