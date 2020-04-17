@@ -1,0 +1,8 @@
+{
+    "infiniteLoopProtection": true,
+    "hardReloadOnChange": true,
+    "container": {
+        "port": 3231
+    },
+    "port": 3231
+}
