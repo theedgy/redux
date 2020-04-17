@@ -6,12 +6,12 @@ import { apiConnection } from '../../services/apiConnection';
 import { addTeams } from '../../store/teams/actions';
 import './index.scss';
 
-const Teams = ({ state: { teams, current }, onAddTeams }) => {
+const Teams = ({ state: { teams }, onAddTeams }) => {
     const [status, setStatus] = useState('idle');
 
     useEffect(() => {
         // Do nothing when request is in progress or teams already stored
-        if (!!teams.length || status === 'loading') {
+        if (teams || status === 'loading') {
             return;
         }
 
@@ -21,7 +21,6 @@ const Teams = ({ state: { teams, current }, onAddTeams }) => {
             onAddTeams(r.teams);
             setStatus('success');
         });
-
     }, [teams, status]);
 
     return (
@@ -31,12 +30,10 @@ const Teams = ({ state: { teams, current }, onAddTeams }) => {
             {(status === 'loading') &&
             <Loading message="Loading Teams..." />}
 
-            {!!teams.length && (
+            {teams && (
                 <div className="Team__list">
                     {teams.map(team => (
-                        <Team key={team.id}
-                              team={team}
-                              current={current === team.id} />
+                        <Team key={team.id} team={team}/>
                     ))}
                 </div>
             )}
