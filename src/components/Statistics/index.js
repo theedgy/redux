@@ -8,75 +8,66 @@ import './index.scss';
 
 const Statistics = ({ state: { teams, current }, onAddTeamStats }) => {
     const [status, setStatus] = useState('idle');
-    const currentFound = !!teams.length && current &&
+
+    // Try to find team provided by current prop from redux store
+    const foundTeam = !!teams.length && current &&
         teams.find(team => team.id === current);
 
     useEffect(() => {
-        if (!current) {
+        // Do nothing when :
+        // - 'current' value is not provided
+        // - request is in progress.
+        // - or current team was found and has stats already so we can load
+        // them from our memory (store).
+        if (!current || status === 'loading' ||
+            (foundTeam && 'stats' in foundTeam)) {
             return;
         }
 
+        // Set loading status and return whenever teams are not occurred yet in
+        // store .
         if (teams.length === 0) {
             setStatus('loading');
             return;
         }
 
-        if (!!teams.length && 'stats' in currentFound) {
-            return;
-        }
-
         setStatus('loading');
 
-        apiConnection(`teams/${current}/matches?status=FINISHED`).then(r => {
-            if (!r.ok) {
-                setStatus(`(${r.type}): ${r.statusText}`);
-                return;
-            }
-
-            return r.json();
-        }).then(r => {
+        apiConnection(`teams/${current}/matches?status=FINISHED`)
+            .then(r => {
                 onAddTeamStats(r.matches, current);
                 setStatus('idle');
-            },
-        ).catch(error => setStatus(`${error}`));
-
-    }, [teams, current, currentFound]);
+            });
+    }, [current, foundTeam, status, teams.length]);
 
     return (
-        <div className="Statistics app-panel">
-            <h2>Statistics {!!teams.length && currentFound && 'stats' in
-            currentFound && `for ${currentFound.name}`}</h2>
+        <section className="Statistics app-panel">
+            <h2>Statistics {!!teams.length && foundTeam && 'stats' in
+            foundTeam && `for ${foundTeam.name}`}</h2>
 
             {teams.length === 0 &&
             <Loading message={'Waiting for teams load'} />}
 
             {status === 'loading' &&
-            <Loading message={`Downloading ${currentFound.name} data`} />}
+            <Loading message={`Downloading ${foundTeam.name} data`} />}
 
-            {
-                !current && !!teams.length && (
-                    <p><i>Please select team to display information</i></p>
-                )}
+            {!current && !!teams.length && (
+                <p><i>Please select team to display information</i></p>
+            )}
 
-            {
-                !!teams.length && currentFound && 'stats' in currentFound && (
-                    <table className="Statistics__list">
-                        <tbody>
-
-                        {
-                            currentFound.stats.map(stat => {
-                                return (
-                                    <tr key={stat.id} className="draw">
-                                        <td>({stat.competition.name})</td>
-                                        <td>{stat.homeTeam.name} {stat.score.fullTime.homeTeam} - {stat.score.fullTime.awayTeam} {stat.awayTeam.name}</td>
-                                    </tr>);
-                            })
-                        }
-                        </tbody>
-                    </table>
-                )
-            }
-        </div>
+            {!!teams.length && foundTeam && 'stats' in foundTeam && (
+                <table className="Statistics__table">
+                    <tbody>
+                    {foundTeam.stats.map(match => (
+                        <tr key={match.id}>
+                            <td>({match.competition.name})</td>
+                            <td>{match.homeTeam.name} {match.score.fullTime.homeTeam} - {match.score.fullTime.awayTeam} {match.awayTeam.name}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            )}
+        </section>
     );
 };
 

@@ -10,11 +10,14 @@ const Team = ({ team, current, onTeamSelect }) => {
             <img src={team.crestUrl}
                  alt={`#${team.shortName}`} />
 
-            <a className={current ? 'active' : 'Team-link'}
-               href={`#${team.shortName}`}
-               onClick={() => onTeamSelect(team.id)}>
-                {`${team.name}`}
-            </a>
+            <button
+                type="button"
+                className={`Team-link${current ? ' active' : ''}`}
+                name={team.shortName}
+                onClick={() => onTeamSelect(team.id)}
+            >
+                {team.name}
+            </button>
         </p>
     );
 };

@@ -1,7 +1,6 @@
 import { ADD_TEAM_STATS, ADD_TEAMS } from './actions';
 
 export const teams = (state = [], action) => {
-    console.log(state, action);
     switch (action.type) {
     case ADD_TEAMS:
         return [...state, ...action.teams];

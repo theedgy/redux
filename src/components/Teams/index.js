@@ -7,33 +7,23 @@ import { Loading } from '../Loading';
 import './index.scss';
 import Team from './components/Team';
 
-const defaultStatus = 'idle';
-
 const Teams = ({ state: { teams, current }, onAddTeams }) => {
-    const [status, setStatus] = useState(defaultStatus);
+    const [status, setStatus] = useState('idle');
 
     useEffect(() => {
-        if (teams.length > 0) {
+        // Do nothing when request is in progress or teams already stored
+        if (!!teams.length || status === 'loading') {
             return;
         }
 
         setStatus('loading');
 
         apiConnection('competitions/2021/teams').then(r => {
-            if (!r.ok) {
-                setStatus(`Error (${r.type}): ${r.statusText}`);
-                return;
-            }
+            onAddTeams(r.teams);
+            setStatus('success');
+        });
 
-            return r.json();
-        }).then(r => {
-                onAddTeams(r.teams);
-                setStatus(defaultStatus);
-            },
-        ).catch(error => setStatus(`${error}`));
-
-        // eslint-disable-next-line
-    }, [teams]);
+    }, [teams, status]);
 
     return (
         <section className="Teams app-panel">
@@ -42,17 +32,20 @@ const Teams = ({ state: { teams, current }, onAddTeams }) => {
             {(status === 'loading') &&
             <Loading message="Loading Teams..." />}
 
-            {!['idle', 'loading'].includes(status) && (
+            {!['idle', 'loading', 'success'].includes(status) && (
                 <Error message={status} />
             )}
 
-            <div className="Team__list">
-                {!!teams.length && teams.map(team => (
-                    <Team key={team.id}
-                          team={team}
-                          current={current === team.id} />
-                ))}
-            </div>
+            {!!teams.length && (
+                <div className="Team__list">
+                    {teams.map(team => (
+                        <Team key={team.id}
+                              team={team}
+                              current={current === team.id} />
+                    ))}
+                </div>
+            )}
+
         </section>
     );
 };
