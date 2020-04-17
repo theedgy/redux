@@ -32,10 +32,6 @@ const Teams = ({ state: { teams, current }, onAddTeams }) => {
             {(status === 'loading') &&
             <Loading message="Loading Teams..." />}
 
-            {!['idle', 'loading', 'success'].includes(status) && (
-                <Error message={status} />
-            )}
-
             {!!teams.length && (
                 <div className="Team__list">
                     {teams.map(team => (
