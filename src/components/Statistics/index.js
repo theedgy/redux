@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { Loading } from '../Loading';
 import { apiConnection } from '../../services/apiConnection';
 import { addTeamStats } from '../../store/teams/actions';
-import { Loading } from '../Loading';
-
 import './index.scss';
 
 const Statistics = ({ state: { teams, current }, onAddTeamStats }) => {

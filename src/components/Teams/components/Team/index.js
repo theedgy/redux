@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setCurrentTeam } from '../../../../store/current/actions';
-
 import './index.scss';
 
 const Team = ({ team, current, onTeamSelect }) => {

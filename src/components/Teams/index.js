@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import Team from './components/Team';
+import { Loading } from '../Loading';
 import { apiConnection } from '../../services/apiConnection';
 import { addTeams } from '../../store/teams/actions';
-import { Error } from '../Error';
-import { Loading } from '../Loading';
 import './index.scss';
-import Team from './components/Team';
 
 const Teams = ({ state: { teams, current }, onAddTeams }) => {
     const [status, setStatus] = useState('idle');

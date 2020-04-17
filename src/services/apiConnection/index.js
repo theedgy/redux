@@ -5,7 +5,12 @@ export const apiConnection = async (endpoint = '') => {
             'X-Auth-Token': '78989ff855294ecc83d070f5d9590eb0',
         },
     })
-        .then(r => r.json())
+        .then(r => {
+            if (!r.ok) {
+                throw Error(`${r.message}`);
+            }
+            return r.json();
+        })
         .catch(error => {
             throw Error(`${error}`);
         });
