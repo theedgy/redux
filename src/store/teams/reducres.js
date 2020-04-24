@@ -1,9 +1,9 @@
 import { ADD_TEAM_STATS, ADD_TEAMS } from './actions';
 
-export const teamsReducer = (state = null, action) => {
+export const teamsReducer = (state = [], action) => {
     switch (action.type) {
     case ADD_TEAMS:
-        return state ? [...state, ...action.teams] : action.teams;
+        return [...state, ...action.teams];
 
     case ADD_TEAM_STATS:
         const newState = [...state];

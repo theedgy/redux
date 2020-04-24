@@ -33,11 +33,10 @@ const Teams = ({ state: { teams }, onAddTeams }) => {
             {teams && (
                 <div className="Team__list">
                     {teams.map(team => (
-                        <Team key={team.id} team={team}/>
+                        <Team key={team.id} team={team} />
                     ))}
                 </div>
             )}
-
         </section>
     );
 };

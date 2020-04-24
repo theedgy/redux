@@ -7,7 +7,7 @@ export const apiConnection = async (endpoint = '') => {
     })
         .then(r => {
             if (!r.ok) {
-                throw Error(`${r.message}`);
+                throw Error(`${r.statusText}`);
             }
             return r.json();
         })
