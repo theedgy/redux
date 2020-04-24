@@ -11,7 +11,7 @@ const Team = ({ team, state: { current }, onTeamSelect }) => {
 
             <button
                 type="button"
-                className={`Team-link${current ? ' active' : ''}`}
+                className={`Team-link${current === team.id ? ' active' : ''}`}
                 name={team.shortName}
                 onClick={() => onTeamSelect(team.id)}
             >

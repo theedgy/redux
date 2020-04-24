@@ -7,9 +7,19 @@ import './index.scss';
 
 const Statistics = ({ state: { teams, current }, onAddTeamStats }) => {
     const [status, setStatus] = useState('idle');
+    const [currentTeam, setCurrentTeam] = useState(null);
 
-    // Try to find team provided by current prop from redux store
-    const foundTeam = teams && current && teams.find(team => team.id === current);
+    useEffect(() => {
+        // Try to find team provided by current prop from redux store
+        const found = teams && current &&
+            teams.find(team => team.id === current);
+
+        // If the team at given id was found in store and it's different than
+        // existing we have stored already then we want to update state of it.
+        if (found && found !== currentTeam) {
+            setCurrentTeam(found);
+        }
+    }, [current, currentTeam, teams]);
 
     useEffect(() => {
         // Do nothing when :
@@ -19,44 +29,36 @@ const Statistics = ({ state: { teams, current }, onAddTeamStats }) => {
         // them from our memory (store).
         if (!current
             || status === 'loading'
-            || (foundTeam && 'stats' in foundTeam)) {
-            return;
-        }
-
-        // Set loading status and return whenever teams are not occurred yet in
-        // store .
-        if (!teams) {
-            setStatus('loading');
+            || (currentTeam && 'stats' in currentTeam)) {
             return;
         }
 
         setStatus('loading');
 
+        // Handle Api connection to retrieve latest matches for selected team
         apiConnection(`teams/${current}/matches?status=FINISHED`)
             .then(r => {
                 onAddTeamStats(r.matches, current);
                 setStatus('idle');
             });
-    }, [current, foundTeam, status, teams]);
+    }, [current, currentTeam, onAddTeamStats, status]);
 
     return (
         <section className="Statistics app-panel">
-            <h2>Statistics {!!teams.length && foundTeam && 'stats' in
-            foundTeam && `for ${foundTeam.name}`}</h2>
+            <h2>Statistics</h2>
 
             {!teams &&
             <Loading message={'Waiting for teams load'} />}
 
             {status === 'loading' &&
-            <Loading message={`Downloading ${foundTeam.name} data`} />}
+            <Loading message={`Downloading ${currentTeam.name} data`} />}
 
             {teams && (
                 !current
                     ? <p><i>Please select team to display information</i></p>
-                    : foundTeam && 'stats' in foundTeam && (
-                    <table className="Statistics__list">
+                    : <table className="Statistics__list">
                         <tbody>
-                        {foundTeam.stats.map(match => (
+                        {currentTeam.stats.map(match => (
                             <tr key={match.id}>
                                 <td>({match.competition.name})</td>
                                 <td>{match.homeTeam.name} {match.score.fullTime.homeTeam} - {match.score.fullTime.awayTeam} {match.awayTeam.name}</td>
@@ -64,7 +66,6 @@ const Statistics = ({ state: { teams, current }, onAddTeamStats }) => {
                         ))}
                         </tbody>
                     </table>
-                )
             )}
         </section>
     );

@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { Profiler } from 'react';
 import Statistics from './components/Statistics';
 import Teams from './components/Teams';
 import { AppStore } from './store';
 import './App.scss';
 
-function App () {
-    return (
-        <AppStore>
-            <main className="PremierLeague">
-                <Teams />
-                <Statistics />
-            </main>
-        </AppStore>
-    );
-}
+export const App = () => {
+    const callback = (id, state, actual) => state === 'mount' &&
+        console.log(`Render time: ${actual}`);
 
-export default App;
+    return (
+        <Profiler id={'App'} onRender={callback}>
+            <AppStore>
+                <main className="PremierLeague">
+                    <Teams />
+                    <Statistics />
+                </main>
+            </AppStore>
+        </Profiler>
+    );
+};
